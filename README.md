@@ -6,99 +6,99 @@
 
 # RATISS Colab Agent Control Plane
 
-Ce dépôt contient un notebook Google Colab pour piloter un agent de développement avec une intégration **GitHub globale**. Le notebook ne dépend d’aucun dépôt précis : tu peux sélectionner un dépôt existant accessible par ton compte GitHub ou en créer un nouveau.
+This repository contains a Google Colab notebook for driving a development agent with **global GitHub** integration. The notebook does not depend on any specific repository: you can select an existing repository accessible from your GitHub account or create a new one.
 
-## Liens rapides
+## Quick links
 
-- **Ouvrir le notebook dans Colab :** [RATISS_Colab_Agent_Control_Plane.ipynb](https://colab.research.google.com/github/samajonathan9-source/ratiss-colab-agent/blob/main/RATISS_Colab_Agent_Control_Plane.ipynb)
-- **Dépôt GitHub :** [samajonathan9-source/ratiss-colab-agent](https://github.com/samajonathan9-source/ratiss-colab-agent)
+- **Open the notebook in Colab:** [RATISS_Colab_Agent_Control_Plane.ipynb](https://colab.research.google.com/github/samajonathan9-source/ratiss-colab-agent/blob/main/RATISS_Colab_Agent_Control_Plane.ipynb)
+- **GitHub repository:** [samajonathan9-source/ratiss-colab-agent](https://github.com/samajonathan9-source/ratiss-colab-agent)
 
-## Important avant de commencer
+## Important before you start
 
-Colab fournit un environnement temporaire. Le notebook peut être interrompu lorsque le runtime expire ou lorsque le GPU n’est plus disponible. Le notebook sauvegarde donc l’état de la tâche dans un fichier de checkpoint et reprend la préparation lorsqu’il est relancé.
+Colab provides a temporary environment. The notebook can be interrupted when the runtime expires or when the GPU is no longer available. The notebook therefore saves the task state in a checkpoint file and resumes preparation when it is restarted.
 
-Colab ne garantit pas le réveil automatique d’un runtime complètement arrêté. Pour une reprise après expiration, il faut rouvrir le notebook, reconnecter le runtime et relancer les cellules. Les modifications déjà poussées sur GitHub restent disponibles.
+Colab does not guarantee automatic wakeup of a fully stopped runtime. To resume after expiry, you must reopen the notebook, reconnect the runtime and rerun the cells. Changes already pushed to GitHub remain available.
 
-## 1. Créer le token GitHub
+## 1. Create the GitHub token
 
-Le notebook demande un **Personal Access Token GitHub**, appelé PAT.
+The notebook asks for a **GitHub Personal Access Token**, called a PAT.
 
-| Format | Type | Utilisation |
+| Format | Type | Usage |
 |---|---|---|
-| `ghp_...` | PAT classique | Le plus simple pour une intégration générale GitHub |
-| `github_pat_...` | Fine-grained PAT | Plus précis et recommandé pour limiter les permissions |
+| `ghp_...` | Classic PAT | The simplest for general GitHub integration |
+| `github_pat_...` | Fine-grained PAT | More precise and recommended to limit permissions |
 
-Le token doit appartenir au compte GitHub qui possède ou peut modifier les dépôts RATISS.
+The token must belong to the GitHub account that owns or can modify the RATISS repositories.
 
-### PAT classique
+### Classic PAT
 
-Dans GitHub : **Settings → Developer settings → Personal access tokens → Tokens (classic)**. Active au minimum la permission `repo`. Elle permet notamment de cloner, modifier et pousser vers des dépôts privés. Pour créer de nouveaux dépôts, utilise un compte autorisé à effectuer cette opération.
+In GitHub: **Settings → Developer settings → Personal access tokens → Tokens (classic)**. Enable at minimum the `repo` permission. It notably allows cloning, modifying and pushing to private repositories. To create new repositories, use an account authorized to perform that operation.
 
 ### Fine-grained PAT
 
-Dans GitHub : **Settings → Developer settings → Personal access tokens → Fine-grained tokens**. Choisis le compte propriétaire, puis les dépôts accessibles. Active au minimum :
+In GitHub: **Settings → Developer settings → Personal access tokens → Fine-grained tokens**. Choose the owner account, then the accessible repositories. Enable at minimum:
 
-- **Contents: Read and write** ;
-- **Metadata: Read** ;
-- **Pull requests: Read and write** si le notebook doit créer des Pull Requests ;
-- la permission de création de dépôt uniquement si nécessaire.
+- **Contents: Read and write**;
+- **Metadata: Read**;
+- **Pull requests: Read and write** if the notebook must create Pull Requests;
+- the repository-creation permission only if necessary.
 
-Donne au token une expiration raisonnable. Ne publie jamais le token dans le notebook, dans un commit, dans une capture d’écran ou dans un message.
+Give the token a reasonable expiration. Never publish the token in the notebook, in a commit, in a screenshot or in a message.
 
-## 2. Ouvrir et lancer le notebook
+## 2. Open and run the notebook
 
-1. Ouvre le [lien Colab direct](https://colab.research.google.com/github/samajonathan9-source/ratiss-colab-agent/blob/main/RATISS_Colab_Agent_Control_Plane.ipynb).
-2. Connecte-toi à Google si Colab le demande.
-3. Accepte la copie du notebook dans ton espace Colab si nécessaire.
-4. Lance les cellules dans l’ordre, de haut en bas.
-5. Autorise l’installation des dépendances et l’accès au runtime.
+1. Open the [direct Colab link](https://colab.research.google.com/github/samajonathan9-source/ratiss-colab-agent/blob/main/RATISS_Colab_Agent_Control_Plane.ipynb).
+2. Sign in to Google if Colab asks.
+3. Accept copying the notebook into your Colab space if needed.
+4. Run the cells in order, top to bottom.
+5. Allow the dependency installation and the runtime access.
 
-La première cellule installe `git`, `gh`, `PyGithub`, `ipywidgets` et `requests`.
+The first cell installs `git`, `gh`, `PyGithub`, `ipywidgets` and `requests`.
 
-## 3. Saisir le token GitHub
+## 3. Enter the GitHub token
 
-Sur ordinateur, tu peux utiliser la zone **Secrets** de Colab avec un secret nommé exactement `GITHUB_TOKEN`.
+On desktop, you can use Colab's **Secrets** panel with a secret named exactly `GITHUB_TOKEN`.
 
-Sur mobile, la zone Secrets peut ne pas apparaître. Exécute la cellule de configuration et colle le PAT lorsqu’elle affiche :
+On mobile, the Secrets panel may not appear. Run the setup cell and paste the PAT when it displays:
 
 ```text
 GitHub Fine-grained token (hidden):
 ```
 
-Le champ masque la saisie. Appuie sur **Entrée** ou sur la touche de validation du clavier. Le notebook doit ensuite afficher :
+The field masks the input. Press **Enter** or the keyboard's confirm key. The notebook should then display:
 
 ```text
 Connecté à GitHub comme: ton_nom_github
 ```
 
-Si la cellule attend indéfiniment, arrête-la et relance uniquement la cellule de configuration. Vérifie que tu as bien collé le token dans le champ masqué.
+If the cell waits indefinitely, stop it and rerun only the setup cell. Check that you pasted the token into the masked field.
 
-## 4. Vérifier la connexion
+## 4. Verify the connection
 
-La cellule de diagnostic vérifie l’identité GitHub avec l’API. Elle ne montre jamais le token.
+The diagnostic cell verifies the GitHub identity through the API. It never displays the token.
 
 ```text
 GitHub OK: samajonathan9-source
 Le dépôt privé sera cloné avec le token via un header temporaire.
 ```
 
-| Message | Correction |
+| Message | Fix |
 |---|---|
-| `GITHUB_TOKEN est vide` | Recréer le secret ou saisir le PAT dans le champ masqué |
-| `Token GitHub refusé` | Vérifier l’expiration et les permissions du PAT |
-| `Resource not accessible` | Ajouter Contents et Metadata |
-| `Repository not found` | Vérifier `propriétaire/dépôt` et l’accès du compte |
-| `could not read Username` | Relancer le notebook mis à jour et vérifier le PAT |
+| `GITHUB_TOKEN est vide` | Recreate the secret or enter the PAT in the masked field |
+| `Token GitHub refusé` | Check the PAT expiration and permissions |
+| `Resource not accessible` | Add Contents and Metadata |
+| `Repository not found` | Check `owner/repository` and the account's access |
+| `could not read Username` | Rerun the updated notebook and check the PAT |
 
-## 5. Choisir un dépôt existant
+## 5. Choose an existing repository
 
-Dans l’interface GitHub, écris le dépôt sous la forme :
+In the GitHub interface, write the repository in the form:
 
 ```text
-proprietaire/nom-du-depot
+owner/repo-name
 ```
 
-Exemples :
+Examples:
 
 ```text
 samajonathan9-source/ratiss-bio
@@ -106,38 +106,38 @@ samajonathan9-source/Crypto-net-veo-
 ratiss-labs/ratiss-qpu-ambient
 ```
 
-Écris ensuite une branche de travail, par exemple :
+Then write a working branch, for example:
 
 ```text
 agent/diagnostic-auth
 ```
 
-Clique sur **Sélectionner**, puis sur **Cloner / préparer branche**. Le notebook clone le dépôt dans `/content/ratiss-agent/workspace/` et prépare une branche dédiée. Il ne pousse pas directement sur `main` par défaut.
+Click **Sélectionner**, then **Cloner / préparer branche**. The notebook clones the repository into `/content/ratiss-agent/workspace/` and prepares a dedicated branch. It does not push directly to `main` by default.
 
-## 6. Créer un nouveau dépôt
+## 6. Create a new repository
 
-Dans la même interface : écris le nom, indique éventuellement une organisation, choisis privé ou public, puis clique sur **Créer dépôt**. Sélectionne ensuite le dépôt créé et prépare sa branche.
+In the same interface: write the name, optionally specify an organization, choose private or public, then click **Créer dépôt**. Then select the created repository and prepare its branch.
 
-La création nécessite une permission GitHub adaptée. Si elle est refusée, crée le dépôt manuellement sur GitHub puis utilise sa référence `proprietaire/nom-du-depot` dans le notebook.
+Creation requires an appropriate GitHub permission. If it is refused, create the repository manually on GitHub then use its `owner/repo-name` reference in the notebook.
 
-## 7. Travailler dans le dépôt
+## 7. Working in the repository
 
-Le notebook permet de consulter le statut Git, vérifier la branche active, lancer des tests, exécuter des scripts autorisés, inspecter les fichiers et sauvegarder un checkpoint. Les commandes sont filtrées par une liste blanche.
+The notebook lets you view the Git status, check the active branch, run tests, execute authorized scripts, inspect files and save a checkpoint. Commands are filtered through a whitelist.
 
 ```python
 status()
 checkpoint('tested', 'Tests locaux terminés')
 ```
 
-## 8. Commit, push et Pull Request
+## 8. Commit, push and Pull Request
 
-Avant de pousser, vérifie le diff, exécute les tests, sauvegarde un checkpoint et confirme la branche active.
+Before pushing, review the diff, run the tests, save a checkpoint and confirm the active branch.
 
 ```python
 commit_and_push('feat: complete RATISS validation')
 ```
 
-Pour ouvrir une Pull Request :
+To open a Pull Request:
 
 ```python
 open_pull_request(
@@ -146,76 +146,76 @@ open_pull_request(
 )
 ```
 
-La Pull Request doit être relue avant fusion. Le notebook ne fusionne pas automatiquement la Pull Request.
+The Pull Request must be reviewed before merging. The notebook does not merge the Pull Request automatically.
 
-## 9. Reprendre après expiration de Colab
+## 9. Resuming after Colab expiry
 
-Lorsque Colab s’arrête :
+When Colab stops:
 
-1. rouvre le notebook ;
-2. reconnecte le runtime ;
-3. relance les cellules d’installation et de configuration ;
-4. saisis à nouveau le PAT si aucun secret Colab n’est disponible ;
-5. exécute la cellule **Checkpoint et reprise** ;
-6. vérifie le dépôt et la branche ;
-7. reclone le dépôt si `/content` a été effacé ;
-8. reprends la phase indiquée par le checkpoint.
+1. reopen the notebook;
+2. reconnect the runtime;
+3. rerun the installation and setup cells;
+4. re-enter the PAT if no Colab secret is available;
+5. run the **Checkpoint et reprise** cell;
+6. check the repository and the branch;
+7. reclone the repository if `/content` was wiped;
+8. resume the phase indicated by the checkpoint.
 
-La reprise s’appuie sur :
+Resumption relies on:
 
 ```text
 /content/ratiss-agent/state.json
 ```
 
-Ce fichier est temporaire dans Colab. Pour conserver l’état malgré une nouvelle session, pousse régulièrement les changements sur une branche GitHub ou copie les résultats dans un stockage persistant.
+This file is temporary in Colab. To keep the state across a new session, regularly push changes to a GitHub branch or copy the results to persistent storage.
 
-## 10. Cycle complet recommandé
+## 10. Recommended full cycle
 
 ```text
-Ouvrir Colab
-  → Installer les dépendances
-  → Fournir GITHUB_TOKEN
-  → Vérifier l’identité GitHub
-  → Lister ou sélectionner un dépôt
-  → Créer un dépôt si nécessaire
-  → Créer une branche de travail
-  → Cloner
-  → Exécuter la tâche
-  → Sauvegarder un checkpoint
-  → Tester
-  → Relire le diff
-  → Commit et push
-  → Créer une Pull Request
-  → Revue humaine
-  → Fusion sur GitHub
+Open Colab
+  → Install dependencies
+  → Provide GITHUB_TOKEN
+  → Verify GitHub identity
+  → List or select a repository
+  → Create a repository if needed
+  → Create a working branch
+  → Clone
+  → Run the task
+  → Save a checkpoint
+  → Test
+  → Review the diff
+  → Commit and push
+  → Create a Pull Request
+  → Human review
+  → Merge on GitHub
 ```
 
-## 11. Sécurité
+## 11. Security
 
-Ne colle jamais un PAT dans une cellule Markdown. Ne l’inclus pas dans une URL Git. Ne l’imprime pas avec `print`. Ne le committe jamais. Si le token apparaît dans un log ou une capture, révoque-le immédiatement dans GitHub et crée-en un nouveau.
+Never paste a PAT in a Markdown cell. Do not include it in a Git URL. Do not print it with `print`. Never commit it. If the token appears in a log or a screenshot, revoke it immediately in GitHub and create a new one.
 
-Le notebook utilise une authentification Git temporaire par header HTTP pour éviter de placer le token dans l’URL de clonage. Le runtime Colab reste néanmoins temporaire.
+The notebook uses temporary Git authentication via an HTTP header to avoid placing the token in the clone URL. The Colab runtime nevertheless remains temporary.
 
-## 12. Limite du modèle OpenHands-LM-32B
+## 12. Limit of the OpenHands-LM-32B model
 
-Le notebook prépare le runtime, GitHub et le contrôle des tâches. Le chargement local d’un modèle 32B dépend de la mémoire GPU disponible. Une T4 ou une P100 ne suffit généralement pas pour une version complète en précision standard. Il faut utiliser une quantification compatible, un runtime distribué ou un endpoint distant.
+The notebook prepares the runtime, GitHub and task control. Loading a 32B model locally depends on the available GPU memory. A T4 or a P100 is generally not enough for a full version in standard precision. You must use compatible quantization, a distributed runtime or a remote endpoint.
 
-La cellule GPU affiche le matériel disponible avant tout lancement lourd.
+The GPU cell displays the available hardware before any heavy launch.
 
-## 13. Dépannage rapide
+## 13. Quick troubleshooting
 
-| Problème | Action immédiate |
+| Problem | Immediate action |
 |---|---|
-| La cellule attend le token | Coller le PAT dans le champ masqué puis appuyer sur Entrée |
-| Aucun espace Secrets sur mobile | Utiliser la saisie masquée directe |
-| `could not read Username` | Utiliser la version publique mise à jour et vérifier le PAT |
-| Dépôt privé inaccessible | Ajouter Contents: Read and write |
-| Push refusé | Vérifier Contents: Read and write et la branche ciblée |
-| Pull Request refusée | Ajouter Pull requests: Read and write |
-| Création de dépôt refusée | Ajouter la permission de création ou créer manuellement |
-| Runtime expiré | Relancer les cellules, recharger le checkpoint et recloner |
-| GPU absent | Reconnecter le runtime ou choisir CPU/endpoint distant |
+| The cell waits for the token | Paste the PAT in the masked field then press Enter |
+| No Secrets panel on mobile | Use the direct masked input |
+| `could not read Username` | Use the updated public version and check the PAT |
+| Private repository inaccessible | Add Contents: Read and write |
+| Push refused | Check Contents: Read and write and the targeted branch |
+| Pull Request refused | Add Pull requests: Read and write |
+| Repository creation refused | Add the creation permission or create manually |
+| Runtime expired | Rerun the cells, reload the checkpoint and reclone |
+| GPU absent | Reconnect the runtime or choose CPU/remote endpoint |
 
-## Licence et responsabilité
+## License and liability
 
-Le notebook est fourni comme outil de développement et de prototypage. Vérifie chaque modification avant de la pousser ou de la fusionner. Les permissions GitHub doivent rester limitées au périmètre réellement nécessaire.
+The notebook is provided as a development and prototyping tool. Review each change before pushing or merging it. GitHub permissions must remain limited to the scope actually needed.
