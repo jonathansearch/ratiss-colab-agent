@@ -10,8 +10,8 @@ This repository contains a Google Colab notebook for driving a development agent
 
 ## Quick links
 
-- **Open the notebook in Colab:** [RATISS_Colab_Agent_Control_Plane.ipynb](https://colab.research.google.com/github/samajonathan9-source/ratiss-colab-agent/blob/main/RATISS_Colab_Agent_Control_Plane.ipynb)
-- **GitHub repository:** [samajonathan9-source/ratiss-colab-agent](https://github.com/samajonathan9-source/ratiss-colab-agent)
+- **Open the notebook in Colab:** [RATISS_Colab_Agent_Control_Plane.ipynb](https://colab.research.google.com/github/jonathansearch/ratiss-colab-agent/blob/main/RATISS_Colab_Agent_Control_Plane.ipynb)
+- **GitHub repository:** [jonathansearch/ratiss-colab-agent](https://github.com/jonathansearch/ratiss-colab-agent)
 
 ## Important before you start
 
@@ -47,7 +47,7 @@ Give the token a reasonable expiration. Never publish the token in the notebook,
 
 ## 2. Open and run the notebook
 
-1. Open the [direct Colab link](https://colab.research.google.com/github/samajonathan9-source/ratiss-colab-agent/blob/main/RATISS_Colab_Agent_Control_Plane.ipynb).
+1. Open the [direct Colab link](https://colab.research.google.com/github/jonathansearch/ratiss-colab-agent/blob/main/RATISS_Colab_Agent_Control_Plane.ipynb).
 2. Sign in to Google if Colab asks.
 3. Accept copying the notebook into your Colab space if needed.
 4. Run the cells in order, top to bottom.
